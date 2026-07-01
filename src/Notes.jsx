@@ -7,9 +7,15 @@ const Notes = () => {
 
   const submitHandler = () => {
     if (!heading.trim()) return;
-    setNotes([...notes, { id: Date.now(), heading: heading, detail: detail }]);
+    setNotes([...notes, { heading: heading, detail: detail }]);
     setHeading("");
     setDetail("");
+  };
+
+  const deleteNote = (idx) => {
+    const copyNotes = [...notes];
+    copyNotes.splice(idx, 1);
+    setNotes(copyNotes);
   };
 
   return (
@@ -30,7 +36,7 @@ const Notes = () => {
         />
         <button
           onClick={submitHandler}
-          className="bg-white text-black px-5 py-3 border rounded-2xl h-12 w-30 cursor-pointer"
+          className="bg-white text-black px-5 py-3 border rounded-2xl h-12 w-30 cursor-pointer active:scale-95"
         >
           Add Notes
         </button>
@@ -38,16 +44,25 @@ const Notes = () => {
 
       <div className="flex flex-col flex-1 ml-20 p-8 overflow-hidden border-l-3">
         <h1 className="text-3xl mb-6 shrink-0">Recent Notes</h1>
-        <div className="flex flex-wrap gap-10 overflow-y-auto flex-1 content-start">
-          {notes.map((note) => (
-            <div
-              key={note.id}
-              className="bg-white text-black h-70 w-60 rounded-2xl p-4"
-            >
-              <h2 className="font-bold text-lg mb-2 truncate">
-                {note.heading}
-              </h2>
-              <p className="text-sm text-gray-600">{note.detail}</p>
+        <div className="flex flex-wrap gap-10 overflow-y-auto flex-1 content-start no-scrollbar">
+          {notes.map((note, idx) => (
+            <div className="bg-white text-black h-70 w-60 rounded-2xl p-4">
+              <div className="h-full flex flex-col justify-between">
+                <div>
+                  <h2 className="font-bold text-lg mb-2 truncate">
+                    {note.heading}
+                  </h2>
+                  <p className="text-sm text-gray-600">{note.detail}</p>
+                </div>
+                <button
+                  onClick={() => {
+                    deleteNote(idx);
+                  }}
+                  className="bg-red-500 rounded-2xl py-1 active:scale-95 cursor-pointer"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
